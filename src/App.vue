@@ -1,11 +1,11 @@
 <template>
-  <div class="m3">
-    <Header :auth="auth" v-if="auth" class="header"></Header>
+  <div class="m3" v-if="auth">
+    <Header :auth="auth" class="header"></Header>
     <div class="main">
-      <SideBar v-if="auth" class="sidebar" :auth="auth" :global="global"></SideBar>
-      <MainView :global="global" v-if="global" class="content"></MainView>
+      <SideBar class="sidebar" :auth="auth" :global="global"></SideBar>
+      <MainView :global="global" class="content" v-if="global"></MainView>
     </div>
-    <Footer :auth="auth" v-if="auth" class="footer"></Footer>
+    <Footer :auth="auth" class="footer"></Footer>
   </div>
 </template>
 
@@ -32,8 +32,8 @@ export default {
   },
   mounted(){
     setTimeout(()=>{
-      this.global = this.m3.global;
       this.auth = this.m3.auth.signedUser;
+      this.global = this.m3.global;
     },500)
   }
 }
