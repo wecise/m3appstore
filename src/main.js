@@ -49,7 +49,7 @@ if(process.env.NODE_ENV === "development"){
   m3.connect({company: process.env.VUE_APP_M3_COMPANY, username: process.env.VUE_APP_M3_USERNAME, password: process.env.VUE_APP_M3_PASSWORD }).then( ()=>{
     setTimeout(()=>{
       init();
-    },500)
+    },1500)
   }).catch((err)=>{
     console.log(err);
   });

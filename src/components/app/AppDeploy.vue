@@ -278,7 +278,8 @@ export default {
                     show: false,
                     data: null,
                     selected: ['web','api'],
-                    entity: null
+                    selectedRule: [],
+                    selectedClass: []
                 },
                 appDeploy:{
                     loading: false,
@@ -542,8 +543,6 @@ export default {
                 
                 this.dialog.appExport.loading = true;
 
-                new Promise()
-
                 if(v === 'web'){
                     exportWeb(v);
                 } else if(v === 'api'){
@@ -559,10 +558,10 @@ export default {
 
         },
         onEntityTreeSelected(data){
-            this.dialog.appExport.entity = data;
+            this.dialog.appExport.selectedClass = data;
         },
         onRuleTreeSelected(data){
-            
+            this.dialog.appExport.selectedRule = data;
         }
     }
 }
