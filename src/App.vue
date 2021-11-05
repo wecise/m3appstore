@@ -30,11 +30,23 @@ export default {
       auth: null
     }
   },
-  mounted(){
-    setTimeout(()=>{
-      this.auth = this.m3.auth.signedUser;
-      this.global = this.m3.global;
-    },500)
+  created(){
+    let init = ()=>{
+        let timer = setInterval(()=>{
+          try{
+            this.m3.init();
+            this.global = this.m3.global;
+            this.auth = this.m3.auth.signedUser;
+            if(this.m3.auth && this.m3.global){
+              clearTimeout(timer);
+            }
+          }catch(err){
+            console.error(err);
+          }
+        },200);
+    };
+    
+    init();
   }
 }
 </script>

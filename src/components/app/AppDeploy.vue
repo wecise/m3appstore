@@ -7,7 +7,9 @@
             <el-tooltip content="应用发布">
                 <el-button type="success" icon="el-icon-plug" @click="onNewAppDeploy">应用发布</el-button>
             </el-tooltip>
-
+            <div style="position: absolute;right: 35px;top: 14px;">
+                <el-input v-model="deploy.dt.search" clearable placeholder="关键字"></el-input>
+            </div>
         </el-header>
         <el-main style="overflow:hidden;">
             <el-table
@@ -51,10 +53,6 @@
                     </el-table-column>
                 </template>
                 <el-table-column label="操作" width="190" fixed="right">
-                    <template slot="header">
-                        <el-input v-model="deploy.dt.filter" placeholder="关键字" clearable>
-                        </el-input>
-                    </template>
                     <template slot-scope="scope">
                         <el-button @click.native.prevent="onRunning(scope.row)" type="text" class="action-btn"><span class="el-icon-platform-eleme" style="color:#4caf50;"></span> 运行</el-button>
                         <el-button @click.native.prevent="onAppExport(scope.row)" type="text" class="action-btn"><span class="el-icon-sold-out" style="color:#4caf50;"></span> 导出</el-button>
@@ -235,7 +233,7 @@
                         </div>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="default" @click="dialog.appExport.show = false;">取消</el-button>
+                        <el-button type="default" @click="dialog.appExport.show = false;dialog.appExport.loading = false;">取消</el-button>
                         <el-button type="primary" @click="onAppExportHandler" :loading="dialog.appExport.loading">导出</el-button>
                     </el-form-item>
                 </el-form>
@@ -265,7 +263,7 @@ export default {
                     rows: [],
                     columns: [],
                     selected: [],
-                    filter: ""
+                    search: ""
                 },
                 rowClass: {
                     type: String,
@@ -278,7 +276,7 @@ export default {
                     show: false,
                     data: null,
                     selected: ['web','api'],
-                    selectedRule: [],
+                    selectedRule: "",
                     selectedClass: []
                 },
                 appDeploy:{
@@ -333,7 +331,7 @@ export default {
         }
     },
     watch:{
-        'deploy.dt.filter':{
+        'deploy.dt.search':{
             handler(val){
                 if(_.isEmpty(val)){
                     this.onRefresh();
@@ -431,7 +429,7 @@ export default {
                     this.dialog.appDeploy.show = false;
                     this.dialog.appDeploy.loading = false;
                     this.initDeployedApp();
-                    this.$message.success("应用发布成功 " + this.dialog.appDeploy.data.title || this.dialog.appDeploy.data.name);
+                    this.$message.success(action==='c'?"应用发布成功 ":"更新应用发布信息成功 " + this.dialog.appDeploy.data.title || this.dialog.appDeploy.data.name);
                 }).catch((err)=>{
                     console.error(err);
                     this.dialog.appDeploy.loading = false;
@@ -532,11 +530,26 @@ export default {
             };
 
             let exportRule = (type)=>{
+                
+                let key = this.dialog.appExport.selectedRule;
+                this.m3.ruleExport(key).then((res)=>{
+                    let FileSaver = require('file-saver');
+                    let blob = new Blob([JSON.stringify(res,null,2)], { type: "octet/stream" });
+                    
+                    const fileName = `【${type}】${window.location.host}_${window.auth.signedUser.Company.name}${key}_${this.moment().format("YYYY-MM-DD_HH:mm:SS")}.json`;
+                    FileSaver.saveAs(blob, fileName);
+                    this.$message.success("配置导出成功 " + key);
 
+                    this.dialog.appExport.loading = false;
+
+                }).catch((err)=>{
+                    this.$message.error("配置导出失败 " + err);
+                    this.dialog.appExport.loading = false;
+                });
             };
 
-            let exportClass = (type)=>{
-
+            let exportClass = (data)=>{
+                console.log(data)
             };
 
             this.dialog.appExport.selected.forEach(v=>{
@@ -553,7 +566,6 @@ export default {
                     exportClass(v);
                 }
 
-
             })
 
         },
@@ -561,7 +573,7 @@ export default {
             this.dialog.appExport.selectedClass = data;
         },
         onRuleTreeSelected(data){
-            this.dialog.appExport.selectedRule = data;
+            this.dialog.appExport.selectedRule = data.key;
         }
     }
 }

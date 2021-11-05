@@ -11,6 +11,7 @@
                     accordion
                     show-checkbox
                     @node-click="onNodeClick"
+                    @check="onNodeClick"
                     :filter-node-method="onNodeFilter"
                     :check-strictly="!control.ifCheckStrictly"
                     :expand-on-click-node="true"
