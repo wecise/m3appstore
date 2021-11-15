@@ -390,7 +390,7 @@ export default {
             });
         },
         initIconList(){
-            this.m3.dfsList({fullname:this.upload.root}).then( (rtn)=>{
+            this.m3.dfs.list({fullname:this.upload.root}).then( (rtn)=>{
                 this.icon.list = rtn.message;
             } );   
         },

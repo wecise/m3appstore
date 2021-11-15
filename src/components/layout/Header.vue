@@ -7,7 +7,7 @@
             <span style="font-size:16px;vertical-align: top;">{{auth.Company.title}}</span>
         </el-col>
         <el-col :span="3" style="text-align: right;">
-            <MessageView></MessageView>
+            <!-- <MessageView></MessageView> -->
         </el-col>
         <el-col :span="1" style="text-align: right;">
             
@@ -20,42 +20,35 @@
                     @select="onSelect">
                 <el-submenu index="1">
                     <template slot="title">
-                        <svg-icon icon-class="user"/> {{ auth.username }}
+                        <i class="el-icon-user-solid"></i> {{ auth.username }}
                     </template>
                     <el-menu-item index="/matrix/user">
+                        <i class="el-icon-user"></i>
                         <template slot="title">
-                            <svg-icon icon-class="user2"/> 
-                            <span slot="title">用户
-                                <!--div>
-                                <el-button type="text" @click.stop="onToggleTheme('dark')" style="background:#252D47;padding: 5px;border-radius: 10px;"></el-button>
-                                <el-button type="text" @click.stop="onToggleTheme('light')" style="background: #1890ff;padding: 5px;border-radius: 10px;"></el-button>
-                                </div>
-                                <el-divider style="margin:0px;"></el-divider-->
-                            </span>
+                            <span slot="title">用户</span>
                         </template>
                     </el-menu-item>
-                    
                     <el-menu-item index="/matrix/system" divided v-if="auth.isadmin">
+                        <i class="el-icon-setting"></i>
                         <template slot="title">
-                            <svg-icon icon-class="system"/>
                             <span slot="title">系统管理</span>
                         </template>
                     </el-menu-item>
                     <el-menu-item index="/matrix/files" v-if="auth.isadmin">
+                        <i class="el-icon-folder"></i>
                         <template slot="title">
-                            <svg-icon icon-class="folder"/>
                             <span slot="title">我的文件</span>
                         </template>
                     </el-menu-item>
                     <el-menu-item index="home" v-if="auth.isadmin">
+                        <i class="el-icon-s-home"></i>
                         <template slot="title">
-                            <svg-icon icon-class="home"/>
                             <span slot="title">默认首页</span>
                         </template>
                     </el-menu-item>
                     <el-menu-item index="signout" divided>
+                        <i class="el-icon-s-unfold"></i>
                         <template slot="title">
-                            <svg-icon icon-class="logout"/> 
                             <span slot="title">注销</span>
                         </template>
                     </el-menu-item>
@@ -68,7 +61,6 @@
 <script>
 import _ from 'lodash';
 import Cookies from 'js-cookie';
-import MessageView from '../../components/message/MessageView';
 
 export default{
     name: "Header",
@@ -80,14 +72,11 @@ export default{
             activeIndex: '1'
         }
     },
-    components: {
-        MessageView
-    },
     created(){
         this.initTheme();
     },
     mounted(){
-        this.m3.setTitle(this.auth);
+        this.m3.html.setTitle(this.auth);
     },
     methods: {
         onSelect(key) {
@@ -117,7 +106,12 @@ export default{
     }
 }
 </script>
-
+<style scope>
+    .el-icon-user-solid{
+        color: #ffffff!important;
+        font-weight:500!important;
+    }
+</style>
 <style>
     .dark .m3 > .header{
         height: 50px!important;

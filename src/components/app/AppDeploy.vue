@@ -439,7 +439,7 @@ export default {
             // to dfs
             if(action === 'c'){
                 let file = this.dialog.appDeploy.file;
-                this.m3.dfsUnZip(this.dialog.appDeploy.data, file).then( rtn=>{
+                this.m3.dfs.unzip(this.dialog.appDeploy.data, file).then( rtn=>{
                     this.dialog.appDeploy.data.dfs = rtn.message[0];
                     toClass();
                 }).catch(err=>{
@@ -472,7 +472,7 @@ export default {
                     this.initDeployedApp();
 
                     // in dfs
-                    this.m3.dfsDelete({parent:row.dfs,name:row.name}).then( rtn=>{
+                    this.m3.dfs.deleteFile({parent:row.dfs,name:row.name}).then( rtn=>{
                         console.log(rtn)
                     });
                 });
@@ -498,7 +498,7 @@ export default {
             let exportWeb = (type)=>{
                 
                 let param = {srcpath: this.dialog.appExport.data.dfs};
-                this.m3.dfsZip(param).then(res=>{
+                this.m3.dfs.zip(param).then(res=>{
                     let FileSaver = require('file-saver');
                     let blob = new Blob([res], {type: "application/octet-stream"});
                     const fileName = `【${type}】${window.location.host}_${window.auth.signedUser.Company.name}_${this.dialog.appExport.data.title}_${this.moment().format("YYYY-MM-DD_HH:mm:SS")}.zip`;
@@ -515,7 +515,7 @@ export default {
             let exportApi = (type)=>{
                 this.dialog.appExport.loading = true;
                 let param = {srcpath: this.dialog.appExport.data.dfs.replace(/\/app/,'/script')};
-                this.m3.dfsZip(param).then(res=>{
+                this.m3.dfs.zip(param).then(res=>{
                     let FileSaver = require('file-saver');
                     let blob = new Blob([res], {type: "application/octet-stream"});
                     const fileName = `【${type}】${window.location.host}_${window.auth.signedUser.Company.name}_${this.dialog.appExport.data.title}_${this.moment().format("YYYY-MM-DD_HH:mm:SS")}.zip`;

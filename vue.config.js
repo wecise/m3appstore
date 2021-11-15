@@ -11,7 +11,42 @@ function resolve(dir) {
 
 module.exports = {
     devServer: {
-        port: 8080
+        port: 8080,
+        contentBase: [
+            path.join(__dirname, "public"), //追加本文件所在目录下的public目录
+        ],
+        proxy: {
+            "/static": {
+                target: `http://${process.env.VUE_APP_M3_HOST}`,
+            },
+            "/user": {
+                target: `http://${process.env.VUE_APP_M3_HOST}`,
+            },
+            "/matrix": {
+                target: `http://${process.env.VUE_APP_M3_HOST}`,
+            },
+            "/script": {
+                target: `http://${process.env.VUE_APP_M3_HOST}`,
+            },
+            "/web": {
+                target: `http://${process.env.VUE_APP_M3_HOST}`,
+            },
+            "/config": {
+                target: `http://${process.env.VUE_APP_M3_HOST}`,
+            },
+            "/fs": {
+                target: `http://${process.env.VUE_APP_M3_HOST}`,
+            },
+            "/matrix/files": {
+                target: `http://${process.env.VUE_APP_M3_HOST}//matrix/files`,
+            },
+            "/matrix/system": {
+                target: `http://${process.env.VUE_APP_M3_HOST}//matrix/system`,
+            },
+            "/help":{
+                target: `http://${process.env.VUE_APP_M3_HOST}/help`
+            }
+        }
     },
 
     outputDir: 'app/matrix/' + process.env.VUE_APP_M3_APP,
@@ -31,7 +66,7 @@ module.exports = {
                         ),
                         threshold:10240,
                         minRatio: 1,
-                        deleteOriginalAssets:false
+                        deleteOriginalAssets: false
                     }),
                     new WebpackZipPlugin({
                         initialFile: 'app',
