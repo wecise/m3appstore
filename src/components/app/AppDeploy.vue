@@ -532,12 +532,9 @@ export default {
             let exportRule = (type)=>{
                 
                 let key = this.dialog.appExport.selectedRule;
-                this.m3.ruleExport(key).then((res)=>{
-                    let FileSaver = require('file-saver');
-                    let blob = new Blob([JSON.stringify(res,null,2)], { type: "octet/stream" });
+                let FileSaver = require('file-saver');
+                this.m3.rule.exportRule(key,FileSaver).then((res)=>{
                     
-                    const fileName = `【${type}】${window.location.host}_${window.auth.signedUser.Company.name}${key}_${this.moment().format("YYYY-MM-DD_HH:mm:SS")}.json`;
-                    FileSaver.saveAs(blob, fileName);
                     this.$message.success("配置导出成功 " + key);
 
                     this.dialog.appExport.loading = false;
