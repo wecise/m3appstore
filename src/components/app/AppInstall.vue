@@ -142,7 +142,7 @@
                                     <el-upload
                                         multiple
                                         :data="{index:true}"
-                                        :action="upload.root+'?issys=true'"
+                                        :action="'/fs'+upload.root+'?issys=true'"
                                         :before-upload="onBeforeUpload"
                                         :on-success="onSuccess"
                                         :on-error="onError"
@@ -265,7 +265,7 @@
                                     <el-upload
                                         multiple
                                         :data="{index:true}"
-                                        :action="upload.root+'?issys=true'"
+                                        :action="'/fs'+upload.root+'?issys=true'"
                                         :before-upload="onBeforeUpload"
                                         :on-success="onSuccess"
                                         :on-error="onError"
@@ -348,6 +348,13 @@ export default {
             }
         }
     },
+    watch:{
+        'dialog.appInstall.show'(val){
+            if(val){
+                this.init();
+            }
+        }
+    },
     mounted() {
         this.$nextTick( ()=>{
             this.init(); 
@@ -414,7 +421,7 @@ export default {
                                             },
                                             icon: ''
                                         };
-            this.dialog.appInstall.data.icon = `${this.upload.url}/creative.png`;
+            this.dialog.appInstall.data.icon = `creative.png`;
             
         },
         onAppInstall(item){
